@@ -12,6 +12,8 @@
 		D7E4F279226052DE00917BBC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7E4F277226052DE00917BBC /* Main.storyboard */; };
 		D7E4F27B226052E000917BBC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7E4F27A226052E000917BBC /* Assets.xcassets */; };
 		D7E4F27E226052E000917BBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7E4F27C226052E000917BBC /* LaunchScreen.storyboard */; };
+		D7E4F286226053B100917BBC /* AnimatedSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E4F285226053B100917BBC /* AnimatedSegue.swift */; };
+		D7E4F2882260562300917BBC /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E4F2872260562300917BBC /* DesignableButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		D7E4F27A226052E000917BBC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7E4F27D226052E000917BBC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7E4F27F226052E000917BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7E4F285226053B100917BBC /* AnimatedSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedSegue.swift; sourceTree = "<group>"; };
+		D7E4F2872260562300917BBC /* DesignableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 				D7E4F273226052DE00917BBC /* AppDelegate.swift */,
 				D7E4F275226052DE00917BBC /* ViewController.swift */,
 				D7E4F277226052DE00917BBC /* Main.storyboard */,
+				D7E4F2872260562300917BBC /* DesignableButton.swift */,
+				D7E4F285226053B100917BBC /* AnimatedSegue.swift */,
 				D7E4F27A226052E000917BBC /* Assets.xcassets */,
 				D7E4F27C226052E000917BBC /* LaunchScreen.storyboard */,
 				D7E4F27F226052E000917BBC /* Info.plist */,
@@ -137,6 +143,8 @@
 			files = (
 				D7E4F276226052DE00917BBC /* ViewController.swift in Sources */,
 				D7E4F274226052DE00917BBC /* AppDelegate.swift in Sources */,
+				D7E4F286226053B100917BBC /* AnimatedSegue.swift in Sources */,
+				D7E4F2882260562300917BBC /* DesignableButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
