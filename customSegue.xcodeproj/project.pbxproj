@@ -14,6 +14,7 @@
 		D7E4F27E226052E000917BBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7E4F27C226052E000917BBC /* LaunchScreen.storyboard */; };
 		D7E4F286226053B100917BBC /* AnimatedSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E4F285226053B100917BBC /* AnimatedSegue.swift */; };
 		D7E4F2882260562300917BBC /* DesignableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E4F2872260562300917BBC /* DesignableButton.swift */; };
+		D7E4F28A226071D300917BBC /* secondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E4F289226071D300917BBC /* secondViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D7E4F27F226052E000917BBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7E4F285226053B100917BBC /* AnimatedSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedSegue.swift; sourceTree = "<group>"; };
 		D7E4F2872260562300917BBC /* DesignableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignableButton.swift; sourceTree = "<group>"; };
+		D7E4F289226071D300917BBC /* secondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secondViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			children = (
 				D7E4F273226052DE00917BBC /* AppDelegate.swift */,
 				D7E4F275226052DE00917BBC /* ViewController.swift */,
+				D7E4F289226071D300917BBC /* secondViewController.swift */,
 				D7E4F277226052DE00917BBC /* Main.storyboard */,
 				D7E4F2872260562300917BBC /* DesignableButton.swift */,
 				D7E4F285226053B100917BBC /* AnimatedSegue.swift */,
@@ -144,6 +147,7 @@
 				D7E4F276226052DE00917BBC /* ViewController.swift in Sources */,
 				D7E4F274226052DE00917BBC /* AppDelegate.swift in Sources */,
 				D7E4F286226053B100917BBC /* AnimatedSegue.swift in Sources */,
+				D7E4F28A226071D300917BBC /* secondViewController.swift in Sources */,
 				D7E4F2882260562300917BBC /* DesignableButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

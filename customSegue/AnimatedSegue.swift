@@ -12,18 +12,47 @@ enum transition: Int {
     case circle = 1
     case scale = 2
     case verticalPaging = 3
-    case unwind = 4
+//   private case unwind = 4
+//   private case zoom = 5
+//   private case zoomUnwind = 6
+    case rotate = 7
+    case fade = 8
+    case expand = 9
 }
 
 class AnimatedSegue: UIStoryboardSegue, CAAnimationDelegate {
+    
+    
 
     var animationType: transition?
     
-    var defaultTransiction :transition = .circle
+    var defaultTransiction :transition = .rotate
+    
+    let firstVCView : UIView = UIView()
+    let secondVCView : UIView = UIView()
+    
+    let toViewController: UIViewController
+    let fromViewController: UIViewController
     
     //@IBInspectable var type : Int = 1
     
     override func perform() {
+        
+        if AnimatedSegue.isAnimating {
+            return
+        }
+        
+        if AnimatedSegue.stack.peek() !== destination {
+            AnimatedSegue.stack.push(vc: source)
+        } else {
+            AnimatedSegue.stack.pop()
+            shouldUnwind = true
+        }
+        
+        guard let firstVCView = self.source.view else {fatalError()}
+        guard let secondVCView = self.destination.view else {fatalError()}
+        
+        
         
         let type = animationType ?? defaultTransiction
         
@@ -34,51 +63,191 @@ class AnimatedSegue: UIStoryboardSegue, CAAnimationDelegate {
             scaleSegue()
         case .verticalPaging:
             verticalPagingSegue()
-        case .unwind:
-            UnwindSegue()
+//        case .unwind:
+//            UnwindSegue()
+//        case .zoom:
+//            zoomSegue()
+//        case .zoomUnwind:
+//            zoomUnwindSegue()
+        case .rotate:
+            rotateSegue()
+        case .fade:
+            fadeSegue()
+        case .expand:
+            expandingSegue()
         }
     }
-    //MARK: - unwind segue
+    
+    //MARK: - rotate segue
+    func rotateSegue() {
+        
+        let containerView = fromViewController.view.superview
+        let originalCenter = fromViewController.view.center
+        
+        //toViewController.view.transform = CGAffineTransform(scaleX: 0.05, y: 0.05)
+        toViewController.view.alpha = 0
+        self.toViewController.view.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        toViewController.view.center = originalCenter
+        containerView?.addSubview(toViewController.view)
+        
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            self.toViewController.view.transform = CGAffineTransform.identity
+            self.toViewController.view.alpha = 1
+            self.fromViewController.view.alpha = 0
+            self.fromViewController.view.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        }, completion: {completted in
+            self.fromViewController.present(self.toViewController, animated: false, completion: nil)
+        })
+    }
+    
+    //MARK: - expanding segue
+    func expandingSegue() {
+        
+        let containerView = fromViewController.view.superview
+        let originalCenter = fromViewController.view.center
+        
+        fromViewController.view.alpha = 0
+        toViewController.view.alpha = 1
+        self.toViewController.view.transform = CGAffineTransform(scaleX: 0, y: 0.2)
+        toViewController.view.center = originalCenter
+        containerView?.addSubview(toViewController.view)
+        
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.toViewController.view.transform = CGAffineTransform(scaleX: 1, y: 0.2)
+        }, completion: {completted in
+            UIView.animate(withDuration: 0.5, animations: {
+                 self.toViewController.view.transform = CGAffineTransform.identity
+            }, completion: { (completted) in
+                self.fromViewController.present(self.toViewController, animated: false, completion: nil)
+            })
+        })
+    }
+    
+    //MARK: - fade segue
+    func fadeSegue() {
+        
+        let containerView = fromViewController.view.superview
+        let originalCenter = fromViewController.view.center
+        
+        
+        toViewController.view.alpha = 0
+        toViewController.view.center = originalCenter
+        containerView?.addSubview(toViewController.view)
+        
+        UIView.animate(withDuration: 2, delay: 0, options: .curveEaseIn, animations: {
+            self.toViewController.view.alpha = 1
+            self.fromViewController.view.alpha = 0
+        }, completion: {completted in
+            self.fromViewController.present(self.toViewController, animated: false, completion: nil)
+        })
+        
+    }
+    
+    
+    //MARK: - zoom seque
+    
+    func zoomSegue() {
+        
+        let window = UIApplication.shared.keyWindow
+        window?.insertSubview(secondVCView, belowSubview: firstVCView)
+        
+        secondVCView.transform = secondVCView.transform.scaledBy(x: 0.001, y: 0.001)
+        
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
+            
+            self.firstVCView.transform = self.secondVCView.transform.scaledBy(x: 0.001, y: 0.001)
+            
+        }) { (Finished) -> Void in
+            
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
+                self.secondVCView.transform = CGAffineTransform.identity
+                
+            }, completion: { (Finished) -> Void in
+                
+                self.firstVCView.transform = CGAffineTransform.identity
+                self.source.present(self.destination, animated: false, completion: nil)
+            })
+        }
+    }
+    
+    func zoomUnwindSegue() {
+
+        let screenHeight = UIScreen.main.bounds.size.height
+        
+        firstVCView.frame = firstVCView.frame.offsetBy( dx: 0.0, dy: screenHeight)
+        firstVCView.transform = firstVCView.transform.scaledBy( x: 0.001, y: 0.001)
+
+        let window = UIApplication.shared.keyWindow
+        window?.insertSubview(secondVCView, aboveSubview: firstVCView)
+
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
+
+            self.secondVCView.transform = self.secondVCView.transform.scaledBy(x: 0.001, y: 0.001)
+            self.secondVCView.frame = self.secondVCView.frame.offsetBy( dx: 0.0, dy: -screenHeight)
+
+            self.firstVCView.transform = CGAffineTransform.identity
+            self.firstVCView.frame = self.firstVCView.frame.offsetBy( dx: 0.0, dy: -screenHeight)
+
+        }) { (Finished) -> Void in
+
+            self.source.dismiss(animated: false, completion: nil)
+        }
+    }
+    
+    
+    
+    //MARK: - unwind segue - verticalpaging back
     func UnwindSegue() {
+        // Assign the source and destination views to local variables.
+        
+        
+        let screenHeight = UIScreen.main.bounds.size.height
+        
+        let window = UIApplication.shared.keyWindow
+        window?.insertSubview(secondVCView, aboveSubview: secondVCView)
+        
+        // Animate the transition.
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.firstVCView.frame = self.firstVCView.frame.offsetBy( dx: 0.0, dy: screenHeight)
+            self.secondVCView.frame = self.secondVCView.frame.offsetBy( dx: 0.0, dy: screenHeight)
+            
+        }) { (Finished) -> Void in
+            
+            self.source.dismiss(animated: false, completion: nil)
+        }
         
     }
     
     //MARK: - vertical paging segue
     func verticalPagingSegue() {
-        // Assign the source and destination views to local variables.
-        if let firstVCView = self.source.view, let secondVCView = self.destination.view {
         
-            // Get the screen width and height.
-            let screenWidth = UIScreen.main.bounds.size.width
-            let screenHeight = UIScreen.main.bounds.size.height
+        // Get the screen width and height.
+        let screenWidth = UIScreen.main.bounds.size.width
+        let screenHeight = UIScreen.main.bounds.size.height
+        
+        // Specify the initial position of the destination view.
+        secondVCView.frame = CGRect(x: 0.0, y: screenHeight, width: screenWidth, height: screenHeight)
+        
+        // Access the app's key window and insert the destination view above the current (source) one.
+        let window = UIApplication.shared.keyWindow
+        window?.insertSubview(secondVCView, aboveSubview: firstVCView)
+        
+        // Animate the transition.
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+           
             
-            // Specify the initial position of the destination view.
-            secondVCView.frame = CGRect(x: 0.0, y: screenHeight, width: screenWidth, height: screenHeight)
+            self.firstVCView.frame = self.firstVCView.frame.offsetBy(dx: 0.0, dy: -screenHeight)
+            self.secondVCView.frame = self.secondVCView.frame.offsetBy(dx: 0.0, dy: -screenHeight)
             
-            // Access the app's key window and insert the destination view above the current (source) one.
-            let window = UIApplication.shared.keyWindow
-            window?.insertSubview(secondVCView, aboveSubview: firstVCView)
-            
-            // Animate the transition.
-            UIView.animate(withDuration: 0.4, animations: { () -> Void in
-               
-                
-                firstVCView.frame = firstVCView.frame.offsetBy(dx: 0.0, dy: -screenHeight)
-                secondVCView.frame = secondVCView.frame.offsetBy(dx: 0.0, dy: -screenHeight)
-                
-            }) { (Finished) -> Void in
-                self.source.present(self.destination, animated: false, completion: nil)
-            }
+        }) { (Finished) -> Void in
+            self.source.present(self.destination, animated: false, completion: nil)
         }
-        
     }
     
     //MARK: - scale segue
     
     func scaleSegue() {
-        
-        let toViewController: UIViewController = destination
-        let fromViewController: UIViewController = source
         
         let containerView = fromViewController.view.superview
         let originalCenter = fromViewController.view.center
@@ -88,9 +257,9 @@ class AnimatedSegue: UIStoryboardSegue, CAAnimationDelegate {
         containerView?.addSubview(toViewController.view)
         
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            toViewController.view.transform = CGAffineTransform.identity
+            self.toViewController.view.transform = CGAffineTransform.identity
         }, completion: {completted in
-            fromViewController.present(toViewController, animated: false, completion: nil)
+            self.fromViewController.present(self.toViewController, animated: false, completion: nil)
         })
     }
     
@@ -119,6 +288,9 @@ class AnimatedSegue: UIStoryboardSegue, CAAnimationDelegate {
         let centerY = UIScreen.main.bounds.height*0.5
         let centerOfScreen = CGPoint(x:centerX, y:centerY)
         
+        toViewController = destination
+        fromViewController = source
+        
         // Initialize properties
         circleOrigin = centerOfScreen
         shouldUnwind = false
@@ -127,17 +299,6 @@ class AnimatedSegue: UIStoryboardSegue, CAAnimationDelegate {
     }
     
     func circleSegue() {
-    
-    if AnimatedSegue.isAnimating {
-    return
-    }
-    
-    if AnimatedSegue.stack.peek() !== destination {
-    AnimatedSegue.stack.push(vc: source)
-    } else {
-    AnimatedSegue.stack.pop()
-    shouldUnwind = true
-    }
     
     let sourceView = source.view as UIView?
     let destView = destination.view as UIView?

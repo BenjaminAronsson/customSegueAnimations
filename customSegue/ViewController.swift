@@ -14,13 +14,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        
     }
 
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue is AnimatedSegue {
-            (segue as! AnimatedSegue).animationType = .verticalPaging
+           // (segue as! AnimatedSegue).animationType = .scale
         }
     }
 }

@@ -65,7 +65,7 @@
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="custom" customClass="AnimatedSegue" customModule="customSegue" customModuleProvider="target" id="JRN-9g-A3Q"/>
+                                    <segue destination="BYZ-38-t0r" kind="custom" customClass="AnimatedSegue" customModule="customSegue" customModuleProvider="target" id="HFx-Zb-hql"/>
                                 </connections>
                             </button>
                         </subviews>
